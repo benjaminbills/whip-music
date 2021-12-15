@@ -3,6 +3,8 @@ from django.db.models.fields import IntegerField
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager, User
+import datetime
+from datetime import date
 
 # Create your models here.
 
@@ -45,11 +47,32 @@ class User(AbstractBaseUser, PermissionsMixin):
         'about'), max_length=500, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-
+    is_premium = models.BooleanField(default=False)
+    paid_until = models.DateField(
+        null=True,
+        blank=True
+    )
     objects = CustomAccountManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['user_name', 'first_name']
+    def set_paid_until(self, date_or_timestamp):
+      if isinstance(date_or_timestamp, int):
+        # input date as timestamp integer
+        paid_until = date.fromtimestamp(date_or_timestamp)
+      elif isinstance(date_or_timestamp, str):
+        # input date as timestamp string
+        paid_until = date.fromtimestamp(int(date_or_timestamp))
+      else:
+        paid_until = date_or_timestamp
+
+      self.paid_until = paid_until
+      self.save()
+    def set_is_premium(self, current_date=datetime.date.today()):
+      if self.paid_until is None:
+        return False
+
+      return current_date < self.paid_until
 
     def __str__(self):
-        return self.user_name
+      return self.user_name
