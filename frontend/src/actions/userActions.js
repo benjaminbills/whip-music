@@ -13,7 +13,6 @@ import {
   SUBSCRIPTION_REQUEST,
   SUBSCRIPTION_SUCCESS,
   SUBSCRIPTION_FAIL,
-  SUBSCRIPTION_RESET,
 } from "../constants/userConstant";
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -131,7 +130,6 @@ export const getUsers = () => async (dispatch, getState) => {
       },
     };
     const { data } = await axios.get(`/api/user/`, config);
-    console.log(data);
     dispatch({ type: USER_LIST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({

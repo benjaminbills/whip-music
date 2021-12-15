@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import Modal from "react-modal";
@@ -31,7 +31,6 @@ function Subscription() {
 
   useEffect(() => {
     if (userInfo) {
-      console.log(userInfo);
       setName(userInfo.user_name);
       setEmail(userInfo.email);
     }
