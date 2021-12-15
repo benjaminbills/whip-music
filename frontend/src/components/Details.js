@@ -16,7 +16,7 @@ function Details() {
     } else {
       setUserDetails(user);
     }
-  }, [dispatch, id, user]);
+  }, [dispatch, id, user, success]);
   const submitHandler = (e) => {
     e.preventDefault();
     axios

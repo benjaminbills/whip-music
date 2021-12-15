@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Subscription from "./components/Subscription";
 import PaymentSuccess from "./components/PaymentSuccess";
@@ -15,14 +15,13 @@ function App() {
       <div>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-
-          <Route path="subscription" element={<Subscription />} />
-          <Route path="payment-successful" element={<PaymentSuccess />} />
-          <Route path="users" element={<Users />} />
-          <Route path="users/:id" element={<Details />} />
+          <Route path="/" element={<Home />} exact />
+          <Route path="login" element={<Login />} exact />
+          <Route path="register" element={<Register />} exact />
+          <Route path="subscription" element={<Subscription />} exact />
+          <Route path="payment-successful" element={<PaymentSuccess />} exact />
+          <Route path="users" element={<Users />} exact />
+          <Route path="users/:id" element={<Details />} exact />
         </Routes>
       </div>
     </Router>

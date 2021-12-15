@@ -37,7 +37,7 @@ function Register() {
     }
   }, [userInfo, history, userInfoReg]);
   return (
-    <div className="container pt-5">
+    <div className="container padding">
       <form onSubmit={submitHandler}>
         <h2>Register</h2>
         {error && <p variant="danger">{error}</p>}
