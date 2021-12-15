@@ -8,6 +8,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from base.serializers import UserSerializer, UserSerializerWithToken
 from base.models import User
 import datetime
+import math
+import random
+# import requests
+from decouple import config
+
 from datetime import date, timedelta
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
   def validate(self, attrs):
@@ -52,10 +57,39 @@ def getUsers(request):
 @api_view(['POST'])
 def updateUserToPremium(request, pk):
   user = User.objects.get(id=pk)
-  user.set_is_premium() 
   user.set_paid_until(datetime.date.today()+timedelta(days=30))
   print(user.set_is_premium())
   user.save()
   return Response({'detail':'User has subscribed to premium'})
+
+def process_payment(name,email,amount,phone):
+     auth_token= config('SECRET_KEY')
+     hed = {'Authorization': 'Bearer ' + auth_token}
+     data = {
+                "tx_ref":''+str(math.floor(1000000 + random.random()*9000000)),
+                "amount":amount,
+                "currency":"KES",
+                "redirect_url":"http://localhost:8000/callback",
+                "payment_options":"card",
+                "meta":{
+                    "consumer_id":23,
+                    "consumer_mac":"92a3-912ba-1192a"
+                },
+                "customer":{
+                    "email":email,
+                    "phonenumber":phone,
+                    "name":name
+                },
+                "customizations":{
+                    "title":"Whip Music Africa",
+                    "description":"Upgrade to premium",
+                    "logo":"https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
+                }
+                }
+     url = ' https://api.flutterwave.com/v3/payments'
+     response = requests.post(url, json=data, headers=hed)
+     response=response.json()
+     link=response['data']['link']
+     return link
 
 
