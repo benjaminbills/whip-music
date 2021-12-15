@@ -13,6 +13,9 @@ import {
   SUBSCRIPTION_REQUEST,
   SUBSCRIPTION_SUCCESS,
   SUBSCRIPTION_FAIL,
+  USER_PROFILE_FAIL,
+  USER_PROFILE_REQUEST,
+  USER_PROFILE_SUCCESS,
 } from "../constants/userConstant";
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -134,6 +137,32 @@ export const getUsers = () => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_LIST_FAIL,
+      payload:
+        error.response && error.response.data.detail
+          ? error.response.data.detail
+          : error.message,
+    });
+  }
+};
+
+export const getUserProfile = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_PROFILE_REQUEST });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    const config = {
+      headers: {
+        "Content-type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/user/${id}/`, config);
+    console.log(data);
+    dispatch({ type: USER_PROFILE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_PROFILE_FAIL,
       payload:
         error.response && error.response.data.detail
           ? error.response.data.detail

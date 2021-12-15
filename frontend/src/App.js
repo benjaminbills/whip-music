@@ -7,6 +7,7 @@ import Users from "./components/Users";
 import Navbar from "./components/Navbar";
 import Home from "./components/Home";
 import Register from "./components/Register";
+import Details from "./components/Details";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="subscription" element={<Subscription />} />
           <Route path="payment-successful" element={<PaymentSuccess />} />
           <Route path="users" element={<Users />} />
+          <Route path="users/:id" element={<Details />} />
         </Routes>
       </div>
     </Router>
