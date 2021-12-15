@@ -20,7 +20,9 @@ function Details() {
   const submitHandler = (e) => {
     e.preventDefault();
     axios
-      .post(`http://localhost:8000/api/user/premium/${user.id}/`)
+      .post(
+        `https://whip-music-solution.herokuapp.com/api/user/premium/${user.id}/`
+      )
       .then((res) => {
         dispatch(getUserProfile(id));
       });

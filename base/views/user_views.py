@@ -78,7 +78,7 @@ def process_payment(request):
               "tx_ref":f"{id}"+':'+str(math.floor(1000000 + random.random()*9000000)),
               "amount":2000,
               "currency":"KES",
-              "redirect_url":"http://localhost:8000/api/user/callback/",
+              "redirect_url":"https://whip-music-solution.herokuapp.com/#/api/user/callback/",
               "payment_options":"card",
               "meta":{
                   "consumer_id":23,
@@ -109,9 +109,8 @@ def payment_response(request):
     print(id)
     user = User.objects.get(id=id)
     user.set_paid_until(datetime.date.today()+timedelta(days=30))
-    print(user.set_is_premium())
     user.save()
     print(status)
     print(tx_ref)
-    response = redirect("http://localhost:3000/payment-successful")
+    response = redirect("https://whip-music-solution.herokuapp.com/#/payment-successful")
     return response

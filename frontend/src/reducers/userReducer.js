@@ -34,10 +34,10 @@ export const userLoginReducer = (state = {}, action) => {
   }
 };
 
-export const subscribeReducer = (state = {}, action) => {
+export const subscribeReducer = (state = { success: false }, action) => {
   switch (action.type) {
     case SUBSCRIPTION_REQUEST:
-      return { loading: true };
+      return { loading: true, success: false };
     case SUBSCRIPTION_SUCCESS:
       return { loading: false, success: true, data: action.payload.data };
     case SUBSCRIPTION_FAIL:
