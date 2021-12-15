@@ -39,7 +39,7 @@ export const subscribeReducer = (state = { success: false }, action) => {
     case SUBSCRIPTION_REQUEST:
       return { loading: true, success: false };
     case SUBSCRIPTION_SUCCESS:
-      return { loading: false, success: true, data: action.payload.data };
+      return { loading: false, success: true, data: action.payload.data.link };
     case SUBSCRIPTION_FAIL:
       return { loading: false, error: action.payload };
     case SUBSCRIPTION_RESET:

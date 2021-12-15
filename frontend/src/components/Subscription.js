@@ -35,7 +35,7 @@ function Subscription() {
       setEmail(userInfo.email);
     }
     if (success) {
-      window.location.href = data.link;
+      window.location.href = data;
     }
   }, [userInfo, data, success]);
 
