@@ -9,6 +9,10 @@ import {
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
   USER_LIST_FAIL,
+  SUBSCRIPTION_REQUEST,
+  SUBSCRIPTION_SUCCESS,
+  SUBSCRIPTION_FAIL,
+  SUBSCRIPTION_RESET,
 } from "../constants/userConstant";
 
 export const userLoginReducer = (state = {}, action) => {
@@ -20,6 +24,21 @@ export const userLoginReducer = (state = {}, action) => {
     case USER_LOGIN_FAIL:
       return { loading: false, error: action.payload };
     case USER_LOGOUT:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export const subscribeReducer = (state = {}, action) => {
+  switch (action.type) {
+    case SUBSCRIPTION_REQUEST:
+      return { loading: true };
+    case SUBSCRIPTION_SUCCESS:
+      return { loading: false, success: true, data: action.payload.data };
+    case SUBSCRIPTION_FAIL:
+      return { loading: false, error: action.payload };
+    case SUBSCRIPTION_RESET:
       return {};
     default:
       return state;
@@ -49,7 +68,7 @@ export const userListReducer = (state = { users: [] }, action) => {
       return {
         loading: false,
         success: true,
-        users: action.payload.users,
+        users: action.payload.user,
       };
     case USER_LIST_FAIL:
       return { loading: false, error: action.payload };

@@ -47,7 +47,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         'about'), max_length=500, blank=True)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-    is_premium = models.BooleanField(default=False)
     paid_until = models.DateField(
         null=True,
         blank=True
@@ -68,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
       self.paid_until = paid_until
       self.save()
-    def set_is_premium(self, current_date=datetime.date.today()):
+    def is_premium(self, current_date=datetime.date.today()):
       if self.paid_until is None:
         return False
 

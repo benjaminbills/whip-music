@@ -10,8 +10,10 @@ from base.models import User
 import datetime
 import math
 import random
-# import requests
+import requests
 from decouple import config
+from django.http import HttpResponse
+from django.shortcuts import redirect
 
 from datetime import date, timedelta
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -62,34 +64,61 @@ def updateUserToPremium(request, pk):
   user.save()
   return Response({'detail':'User has subscribed to premium'})
 
-def process_payment(name,email,amount,phone):
-     auth_token= config('SECRET_KEY')
-     hed = {'Authorization': 'Bearer ' + auth_token}
-     data = {
-                "tx_ref":''+str(math.floor(1000000 + random.random()*9000000)),
-                "amount":amount,
-                "currency":"KES",
-                "redirect_url":"http://localhost:8000/callback",
-                "payment_options":"card",
-                "meta":{
-                    "consumer_id":23,
-                    "consumer_mac":"92a3-912ba-1192a"
-                },
-                "customer":{
-                    "email":email,
-                    "phonenumber":phone,
-                    "name":name
-                },
-                "customizations":{
-                    "title":"Whip Music Africa",
-                    "description":"Upgrade to premium",
-                    "logo":"https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
-                }
-                }
-     url = ' https://api.flutterwave.com/v3/payments'
-     response = requests.post(url, json=data, headers=hed)
-     response=response.json()
-     link=response['data']['link']
-     return link
+# @api_view(['POST'])
+# def subscribe(request, pk):
+#   data = request.data
+#   phone = data['phone']
+#   name = data['name']
+#   email = data['email']
+#   amount = data['amount']
+  # return redirect(str(process_payment))
+@api_view(['POST'])
+def process_payment(request):
+    data = request.data
+    id = data['id']
+    phone = data['phone']
+    name = data['name']
+    email = data['email']
+    auth_token= config('FLW_KEY')
+    hed = {'Authorization': 'Bearer ' + auth_token}
+    data = {
+              "tx_ref":f"{id}"+':'+str(math.floor(1000000 + random.random()*9000000)),
+              "amount":2000,
+              "currency":"KES",
+              "redirect_url":"http://localhost:8000/api/user/callback/",
+              "payment_options":"card",
+              "meta":{
+                  "consumer_id":23,
+                  "consumer_mac":"92a3-912ba-1192a"
+              },
+              "customer":{
+                  "email":email,
+                  "phonenumber":phone,
+                  "name":name
+              },
+              "customizations":{
+                  "title":"Whip Music Africa",
+                  "description":"Upgrade to premium",
+                  "logo":"https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg"
+              }
+              }
+    url = ' https://api.flutterwave.com/v3/payments/'
+    response = requests.post(url, json=data, headers=hed)
+    response=response.json()
+    return Response(response)
 
 
+@api_view(['GET'])
+def payment_response(request):
+    status=request.GET.get('status', None)
+    tx_ref=request.GET.get('tx_ref', None)
+    id = tx_ref.split(':')[0]
+    print(id)
+    user = User.objects.get(id=id)
+    user.set_paid_until(datetime.date.today()+timedelta(days=30))
+    print(user.set_is_premium())
+    user.save()
+    print(status)
+    print(tx_ref)
+    response = redirect("http://localhost:3000/payment-successful")
+    return response

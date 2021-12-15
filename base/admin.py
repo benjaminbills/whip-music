@@ -8,15 +8,15 @@ from django.db import models
 class UserAdminConfig(UserAdmin):
     model = User
     search_fields = ('email', 'user_name', 'first_name',)
-    list_filter = ('email', 'user_name', 'first_name', 'is_active', 'is_staff', 'is_premium')
+    list_filter = ('email', 'user_name', 'first_name', 'is_active', 'is_staff')
     ordering = ('-start_date',)
     list_display = ('email', 'id', 'user_name', 'first_name',
-                    'is_active', 'is_staff', 'is_premium', 'paid_until')
+                    'is_active', 'is_staff', 'paid_until')
     fieldsets = (
         (None, {'fields': ('email', 'user_name', 'first_name',)}),
         ('Permissions', {'fields': ('is_staff', 'is_active', )}),
         ('Personal', {'fields': ('about',)}),
-        ('Plan', {'fields': ('paid_until','is_premium')}),
+        ('Plan', {'fields': ('paid_until',)}),
     )
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 20, 'cols': 60})},
@@ -24,7 +24,7 @@ class UserAdminConfig(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'user_name', 'first_name', 'password1', 'password2', 'is_active', 'is_staff', 'is_premium', 'paid_until')}
+            'fields': ('email', 'user_name', 'first_name', 'password1', 'password2', 'is_active', 'is_staff', 'paid_until')}
          ),
     )
 

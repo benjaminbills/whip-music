@@ -18,9 +18,13 @@ function Login() {
   const userLogin = useSelector((state) => state.userLogin);
 
   const { error, loading, userInfo } = userLogin;
-
+  useEffect(() => {
+    if (userInfo) {
+      history("/subscription");
+    }
+  }, [userInfo, history]);
   return (
-    <div className="container pt-5">
+    <div className="container padding">
       <form onSubmit={submitHandler}>
         {error && <p>{error}</p>}
         <h2>Sign In</h2>

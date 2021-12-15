@@ -10,7 +10,6 @@ class UserSerializer(serializers.ModelSerializer):
   isAdmin=serializers.SerializerMethodField(read_only=True)
   is_premium=serializers.SerializerMethodField(read_only=True)
   paid_until=serializers.SerializerMethodField(read_only=True)
-  check=serializers.SerializerMethodField(read_only=True)
   class Meta:
     model = User
     fields = ['id', 'user_name', 'email','isAdmin', 'is_premium','check', 'paid_until']
@@ -18,11 +17,9 @@ class UserSerializer(serializers.ModelSerializer):
     return obj.id  
   def get_isAdmin(self, obj):
     return obj.is_staff
-  def get_is_premium(self, obj):
-    return obj.is_premium
   def get_paid_until(self, obj):
     return obj.paid_until
-  def get_check(self, obj, current_date=datetime.date.today()):
+  def get_is_premium(self, obj, current_date=datetime.date.today()):
     if obj.paid_until is None:
       return False
 
@@ -38,7 +35,7 @@ class UserSerializerWithToken(UserSerializer):
   token = serializers.SerializerMethodField(read_only=True)
   class Meta:
     model = User
-    fields = ['id', 'user_name', 'email','isAdmin', 'is_premium', 'token' ]
+    fields = ['id', 'user_name', 'email','isAdmin', 'token' ]
   def get_token(self,obj):
     token = RefreshToken.for_user(obj)
     return str(token.access_token)
