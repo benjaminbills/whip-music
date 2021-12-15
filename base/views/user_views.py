@@ -60,18 +60,11 @@ def getUsers(request):
 def updateUserToPremium(request, pk):
   user = User.objects.get(id=pk)
   user.set_paid_until(datetime.date.today()+timedelta(days=30))
-  print(user.set_is_premium())
   user.save()
   return Response({'detail':'User has subscribed to premium'})
 
-# @api_view(['POST'])
-# def subscribe(request, pk):
-#   data = request.data
-#   phone = data['phone']
-#   name = data['name']
-#   email = data['email']
-#   amount = data['amount']
-  # return redirect(str(process_payment))
+
+
 @api_view(['POST'])
 def process_payment(request):
     data = request.data

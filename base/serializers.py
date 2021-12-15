@@ -12,7 +12,7 @@ class UserSerializer(serializers.ModelSerializer):
   paid_until=serializers.SerializerMethodField(read_only=True)
   class Meta:
     model = User
-    fields = ['id', 'user_name', 'email','isAdmin', 'is_premium','check', 'paid_until']
+    fields = ['id', 'user_name', 'email','isAdmin', 'is_premium', 'paid_until']
   def get_id(self, obj):
     return obj.id  
   def get_isAdmin(self, obj):
