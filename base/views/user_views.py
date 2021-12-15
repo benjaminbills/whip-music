@@ -7,7 +7,8 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from base.serializers import UserSerializer, UserSerializerWithToken
 from base.models import User
-
+import datetime
+from datetime import date, timedelta
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
   def validate(self, attrs):
       data = super().validate(attrs)
@@ -46,4 +47,15 @@ def getUserByID(request, pk):
 def getUsers(request):
   users = User.objects.all()
   serializer = UserSerializer(users, many=True)
-  return Response({'users':serializer.data})
+  return Response({'user':serializer.data})
+
+@api_view(['POST'])
+def updateUserToPremium(request, pk):
+  user = User.objects.get(id=pk)
+  user.set_is_premium() 
+  user.set_paid_until(datetime.date.today()+timedelta(days=30))
+  print(user.set_is_premium())
+  user.save()
+  return Response({'detail':'User has subscribed to premium'})
+
+
