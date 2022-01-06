@@ -11,7 +11,7 @@ function Navbar() {
   const { userInfo } = userLogin;
 
   return (
-    <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark p-md-3">
+    <nav className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark p-md-3 padding-bottom">
       <div className="container">
         <Link className="navbar-brand" to="/">
           WMA

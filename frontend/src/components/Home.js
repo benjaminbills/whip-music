@@ -13,7 +13,7 @@ function Home() {
     // dispatch({ type: BOOK_COLLECTED_RESET });
   }, [userInfo, history]);
   return (
-    <div className="padding container">
+    <div className="container">
       <h2>Welcome</h2>
     </div>
   );
